@@ -24,8 +24,8 @@ MSXライセンシングコーポレーションに変更されております�
 | [Graph] | [F6] | 0B | [GRAPH] (6-2)-> [HOME] (8-1) |
 | [`~] | [半/全] | 0E | [SELECT] (7-6)-> [￥｜] (1-4) |
 | [(R)CTRL] | [Home] | E06C | [HOME] (8-1)-> [＼＿ろ] (2-5) |
-| (V) | [PrtScr] | E07C | DisplauMode -> [STOP] (7-4) |
-| (T) | [Pause] | E11477 | LedDebug? -> DisplauMode |
+| (V) | [PrtScr] | E07C | DisplayMode -> [STOP] (7-4) |
+| (T) | [Pause] | E11477 | LedDebug? -> DisplayMode |
 
 右[CTRL]は[FN]+[F3]のメニューで[HOME]に設定する前提
 
