@@ -272,27 +272,30 @@ constant rom101 : rom_101 := (
 constant rom106 : rom_106 := (
 
 -- Special keys for Japanese 106 Keyboard
--- PS/2 KEYS              : MSX KEYS                          : OneChipBook.A KEYS 
---------------------------------------------------------------------------------
--- F6          ($0B)      : [GRAPH]     ($26) -> [HOME] ($18) : [GRAPH]
--- F7          ($83)      : [KANA]      ($46)                 : [KANA]
--- F8          ($0A)      : [SELECT]    ($67)                 : [SELECT]
--- END         ($E069)    : [STOP]      ($47)
--- HOME        ($E06C)    : [->]        ($18) -> [ _ろ] ($52) : [(R)CTRL](CTRL->HOME)
--- Han/Zenkaku ($0E)      : [SELECT]    ($67) -> [\|- ] ($41) : [`~]
+-- PS/2 KEYS              : MSX KEYS                            : OneChipBook.A KEYS 
+------------------------------------------------------------------------------------
+-- F6          ($0B)      : [GRAPH]     ($26) -> [HOME] ($18)   : [GRAPH]
+-- F7          ($83)      : [KANA]      ($46)                   : [KANA]
+-- F8          ($0A)      : [SELECT]    ($67)                   : [SELECT]
+-- End         ($E069)    : [STOP]      ($47)
+-- Home        ($E06C)    : [->]        ($18) -> [＼＿ろ] ($52) : [(R)CTRL](CTRL->HOME)
+-- Han/Zenkaku ($0E)      : [SELECT]    ($67) -> [￥｜ー] ($41) : [`~]
 -- Katakana    ($13)      : [KANA]      ($46)
--- ALT L       ($11)      : [GRAPH]     ($26)                 : [FN2]
--- ALT R       ($E011)    : [GRAPH]     ($26)
+-- Alt (L)     ($11)      : [GRAPH]     ($26)                   : [FN2]
+-- Alt (R)     ($E011)    : [GRAPH]     ($26)
 -- NumLock     ($77)      :             ($6A)
--- PrtScr      ($E07C)    : DisplayMode ($6F) -> [STOP] ($47) : (V)
+-- PrtScr      ($E07C)    : DisplayMode ($6F) -> [STOP] ($47)   : (V)
 -- ScrollLock  ($7E)      :             ($7E)
--- Pause       ($E11477)  : Pause       ($6A) -> DisplayMode  : (T)
+-- Pause       ($E11477)  : LedDebug?   ($6A) -> DisplayMode    : (T)
+-- Ctrl (L)    ($14)      : [CTRL]      ($16) -> [CAPS] ($36)   : [CTRL]
+-- Ctrl (R)    ($E014)    : [CTRL]      ($16)
+-- CapsLock    ($58)      : [CAPS]      ($36) -> [CTRL] ($16)   : [CAPS]
 
 -- Keymap for 106 keyboard (set 2)
 --      PS/2 Scan Code XX
         X"FF", X"3F", X"FF", X"17", X"76", X"56", X"66", X"0F", -- 00
         X"FF", X"2F", X"67", X"18", X"07", X"37", X"41", X"FF", -- 08
-        X"FF", X"26", X"06", X"46", X"16", X"64", X"10", X"FF", -- 10
+        X"FF", X"26", X"06", X"46", X"36", X"64", X"10", X"FF", -- 10
         X"FF", X"FF", X"75", X"05", X"62", X"45", X"20", X"FF", -- 18
         X"FF", X"03", X"55", X"13", X"23", X"40", X"30", X"FF", -- 20
         X"FF", X"08", X"35", X"33", X"15", X"74", X"50", X"FF", -- 28
@@ -301,7 +304,7 @@ constant rom106 : rom_106 := (
         X"FF", X"22", X"04", X"63", X"44", X"00", X"11", X"FF", -- 40
         X"FF", X"32", X"42", X"14", X"71", X"54", X"21", X"FF", -- 48
         X"FF", X"52", X"02", X"FF", X"51", X"31", X"FF", X"FF", -- 50
-        X"36", X"06", X"77", X"61", X"FF", X"12", X"FF", X"FF", -- 58
+        X"16", X"06", X"77", X"61", X"FF", X"12", X"FF", X"FF", -- 58
         X"FF", X"41", X"FF", X"FF", X"1B", X"FF", X"57", X"3B", -- 60
         X"FF", X"49", X"41", X"79", X"2A", X"FF", X"FF", X"FF", -- 68
         X"39", X"7A", X"59", X"0A", X"1A", X"3A", X"27", X"6A", -- 70
