@@ -2026,18 +2026,18 @@ begin
 --              legacy_vga  <= '0';                                 -- behaves like vAllow_n        (for V9938 VDP core)
 
             when "01" =>                                            -- RGB 15kHz
-                pDac_VR     <= VideoR;                              -- Luminance 100%
-                pDac_VG     <= VideoG;
-                pDac_VB     <= VideoB;
+                pDac_VR     <= "0" & VideoR( 5 downto 1 );          -- Luminance 50%
+                pDac_VG     <= "0" & VideoG( 5 downto 1 );
+                pDac_VB     <= "0" & VideoB( 5 downto 1 );
                 Reso_v      <= '0';                                 -- Hsync:15kHz
                 pVideoHS_n  <= VideoCS_n;                           -- CSync Enabled
                 pVideoVS_n  <= DACout;                              -- Audio Out (Mono)
 --              legacy_vga  <= '0';                                 -- behaves like vAllow_n        (for V9938 VDP core)
 
             when others =>                                          -- VGA / VGA+ 31kHz
-                pDac_VR     <= VideoR;                              -- Luminance 100%
-                pDac_VG     <= VideoG;
-                pDac_VB     <= VideoB;
+                pDac_VR     <= "0" & VideoR( 5 downto 1 );          -- Luminance 50%
+                pDac_VG     <= "0" & VideoG( 5 downto 1 );
+                pDac_VB     <= "0" & VideoB( 5 downto 1 );
                 Reso_v      <= '1';                                 -- Hsync:31kHz
                 pVideoHS_n  <= VideoHS_n;
                 pVideoVS_n  <= VideoVS_n;
