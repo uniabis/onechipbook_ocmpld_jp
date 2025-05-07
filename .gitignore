@@ -1,2 +1,11 @@
 # Ignore these extensions
 *.bak
+/esemsx3/db
+/esemsx3/incremental_db
+/esemsx3/*.rpt
+/esemsx3/emsx_top.pin
+/esemsx3/emsx_top.pof
+/esemsx3/emsx_top.rbf
+/esemsx3/emsx_top.sof
+/esemsx3/emsx_top.done
+/esemsx3/*.summary
