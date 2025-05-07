@@ -272,21 +272,26 @@ constant rom101 : rom_101 := (
 constant rom106 : rom_106 := (
 
 -- Special keys for Japanese 106 Keyboard
--- PS/2 KEYS             : MSX KEYS
------------------------------------------
--- F6          ($0B)     : [GRAPH]  ($26)
--- F7          ($83)     : [KANA]   ($46)
--- F8          ($0A)     : [SELECT] ($67)
--- END         ($E0 $69) : [STOP]   ($47)
--- Han/Zenkaku ($0E)     : [SELECT] ($67)
--- Katakana    ($13)     : [KANA]   ($46)
--- ALT L       ($11)     : [GRAPH]  ($26)
--- ALT R       ($E0 11)  : [GRAPH]  ($26)
+-- PS/2 KEYS              : MSX KEYS                          : OneChipBook.A KEYS 
+--------------------------------------------------------------------------------
+-- F6          ($0B)      : [GRAPH]     ($26) -> [HOME] ($18) : [GRAPH]
+-- F7          ($83)      : [KANA]      ($46)                 : [KANA]
+-- F8          ($0A)      : [SELECT]    ($67)                 : [SELECT]
+-- END         ($E069)    : [STOP]      ($47)
+-- HOME        ($E06C)    : [->]        ($18) -> [ _ろ] ($52) : [(R)CTRL](CTRL->HOME)
+-- Han/Zenkaku ($0E)      : [SELECT]    ($67) -> [\|- ] ($41) : [`~]
+-- Katakana    ($13)      : [KANA]      ($46)
+-- ALT L       ($11)      : [GRAPH]     ($26)                 : [FN2]
+-- ALT R       ($E011)    : [GRAPH]     ($26)
+-- NumLock     ($77)      :             ($6A)
+-- PrtScr      ($E07C)    : DisplayMode ($6F) -> [STOP] ($47) : (V)
+-- ScrollLock  ($7E)      :             ($7E)
+-- Pause       ($E11477)  : Pause       ($6A) -> DisplayMode  : (T)
 
 -- Keymap for 106 keyboard (set 2)
 --      PS/2 Scan Code XX
         X"FF", X"3F", X"FF", X"17", X"76", X"56", X"66", X"0F", -- 00
-        X"FF", X"2F", X"67", X"26", X"07", X"37", X"67", X"FF", -- 08
+        X"FF", X"2F", X"67", X"18", X"07", X"37", X"41", X"FF", -- 08
         X"FF", X"26", X"06", X"46", X"16", X"64", X"10", X"FF", -- 10
         X"FF", X"FF", X"75", X"05", X"62", X"45", X"20", X"FF", -- 18
         X"FF", X"03", X"55", X"13", X"23", X"40", X"30", X"FF", -- 20
@@ -332,9 +337,9 @@ constant rom106 : rom_106 := (
         X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 50
         X"FF", X"FF", X"77", X"FF", X"FF", X"FF", X"FF", X"FF", -- 58
         X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 60
-        X"FF", X"47", X"FF", X"48", X"18", X"FF", X"FF", X"FF", -- 68
+        X"FF", X"47", X"FF", X"48", X"52", X"FF", X"FF", X"FF", -- 68
         X"28", X"38", X"68", X"FF", X"78", X"58", X"FF", X"FF", -- 70
-        X"FF", X"FF", X"4F", X"FF", X"6F", X"5F", X"FF", X"FF", -- 78
+        X"FF", X"FF", X"4F", X"FF", X"47", X"5F", X"FF", X"FF", -- 78
         X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 80
         X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 88
         X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 90
