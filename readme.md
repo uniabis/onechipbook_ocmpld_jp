@@ -30,16 +30,16 @@ MSXライセンシングコーポレーションに変更されております�
 右[CTRL]は[FN]+[F3]のメニューで[HOME]に設定する前提
 
 FPGA側でキー割り当てを変更しているため外部PS/2キーボードを接続した場合も同様に割当が変更されてしまいます。
-([Home]が[\_ろ]になってしまうなど)
+([Home]が[＼＿ろ]になってしまうなど)
 
 ### Led関係はZemmixNeo版相当、RGB出力は1chipMSX版相当に調整
 
 ## デバイスへの書き込み
 
 Cyclone Iデバイスの開発には、
-すでにダウンロードできない、
+すでに正式にはダウンロードできない、
 Quartus II v11.0sp1 web edition 以前か、
-有料のv13.0sp1 subscription editionが必要ですが、
+有料のv13.0sp1 subscription editionが必要です。
 
 コンフィグレーションデータをフラッシュメモリEPCS4に書き込むだけであれば、
 最新バージョンのQuartus Prime LiteもしくはProgrammer単体が適しています。
@@ -65,7 +65,7 @@ Quartus II v11.0sp1 web edition 以前か、
 
 ### OCMPLD
 
-history.msxplusplus.txt(history.txtから改名)参照
+[history.msxplusplus.txt](https://raw.githubusercontent.com/uniabis/onechipbook_ocmpld_jp/refs/heads/master/history.msxplusplus.txt)(history.txtから改名)参照
 
 ### 1chipMSX
 
