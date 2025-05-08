@@ -31,7 +31,7 @@
 --
 ---------------------------------------------------------------------------------
 -- OCM-PLD Pack v3.9.2 by KdL (2024.02.03)
--- MSX2+ Stable Release for Zemmix Neo (KR), Zemmix Neo BR and SX-1 (regular)
+-- MSX2 Experimental Release for OneChipBook
 -- Special thanks to t.hara, caro, mygodess & all MRC users (http://www.msx.org)
 ---------------------------------------------------------------------------------
 -- Setup for XTAL 21.47727MHz
