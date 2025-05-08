@@ -3,7 +3,7 @@
 ## 概要
 
 本プロジェクトはOneChipBook-12を日本語キーボードMSX2化する非公式FPGAファームウェアです。
-無保障・無サポートのため、不具合があっても元プロジェクトなどへの報告などはお控えください。
+無保障・無サポートのため、不具合があっても元プロジェクトなどへの報告はお控えください。
 
 1chipMSXをベースにしたOCMPLDをさらに一部変更しています。
 ビデオ出力など諸機能は十分に検証しておりません。
@@ -13,7 +13,16 @@
 権利管理団体は1chipMSX販売時のMSXアソシエーションから、
 MSXライセンシングコーポレーションに変更されております。
 
-## 変更内容
+組み込み済みのBIOSはMSX2ですが、再現するハードウェアはMSX2+相当です。
+レイドック2など一部のMSX2+用ソフトはそのまま動作するものと思われます。
+OCMPLDにはSDカードからBIOSを読み込む仕組みがあるため、
+SDカードにSDBIOSイメージを置くことでMSX2+化が可能です。
+
+## 変更内容(0.0.2予定)
+
+### [CTRL]と[CAPS]キーの入れ替え
+
+## 変更内容(0.0.1)
 
 ### 非商用限定の1chipMSXのMSX2相当BIOSのバグ修正版を組み込み
 
@@ -37,12 +46,12 @@ FPGA側でキー割り当てを変更しているため外部PS/2キーボード
 ## デバイスへの書き込み
 
 Cyclone Iデバイスの開発には、
+有料のQuartus II v13.0sp1 subscription editionか、
 すでに正式にはダウンロードできない、
-Quartus II v11.0sp1 web edition 以前か、
-有料のv13.0sp1 subscription editionが必要です。
+Quartus II v11.0sp1 web edition 以前が必要です。
 
-コンフィグレーションデータをフラッシュメモリEPCS4に書き込むだけであれば、
-最新バージョンのQuartus Prime LiteもしくはProgrammer単体が適しています。
+コンパイル済みのコンフィグレーションデータをフラッシュメモリEPCS4に書き込むだけであれば、
+最新バージョンのQuartus Prime LiteのProgrammer単体が適しています。
 
 1. PCに最新バージョンのQuartus Prime LiteもしくはProgrammerをインストールする
 2. PCのUSB端子にOneChipBook付属のUSB Blaster海賊品もしくは相当品を接続する
@@ -52,7 +61,7 @@ Quartus II v11.0sp1 web edition 以前か、
 6. 認識したUSB Blaster等をリストをダブルクリックするなりドロップダウンリストから選択するなりする
 7. 「Close」ボタンで「Hardware Setup」画面を閉じる
 8. ModeドロップダウンからActive Serial Programmingを選択する
-9．file>openメニューで書き込みたいpofファイル等を選択する
+9. file>openメニューで書き込みたい[pofファイル](https://github.com/uniabis/onechipbook_ocmpld_jp/releases)等を選択する
 10. 「Program/Configure」列と「Verify」列の一番上の行をそれぞれチェックすると下も自動でチェックされる
 11. OneChipBook前面の四角い10ピン端子にUSBブラスターのフラットケーブルを接続する
 12. OneChipBookの電源を入れる
