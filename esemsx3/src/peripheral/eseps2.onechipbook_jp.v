@@ -1,6 +1,6 @@
 //
-// eseps2.v
-//   PS/2 keyboard interface for OCM-PLD/OCM-Kai
+// eseps2.onechipbook_jp.v
+//   PS/2 keyboard interface for OneChipBook Japanese
 //   Revision 2.00
 //
 // Copyright (c) 2022 Takayuki Hara (HRA!)

@@ -1,7 +1,7 @@
 --
--- swioports.vhd
+-- swioports.onechipbook_jp.vhd
 --   Switched I/O ports ($40-$4F)
---   Revision 12
+--   Revision 12 for OneChipBook Japanese
 --
 -- Copyright (c) 2011-2024 KdL
 -- All rights reserved.
@@ -333,7 +333,7 @@ begin
                             iSlt1_linear    <=  '0';
                         end if;
                     end if;
-                    if( ff_dip_req(4) /= ff_dip_ack(4) )then                    -- DIP-SW5      is  SLOT2(A) state
+                    if( ff_dip_req(4) /= ff_dip_ack(4) )then                    -- DIP-SW5      is  SLOT2 state
                         if( io43_id212(4) = '0' )then                           -- BIT[4]=0     of  Lock Mask
                             io42_id212(4)   <=  ff_dip_req(4);
                             io42_id212(5)   <=  '0';
@@ -341,8 +341,8 @@ begin
                             iSlt2_linear    <=  '0';
                         end if;
                     end if;
-                    if( ff_dip_req(5) /= ff_dip_ack(5) )then                    -- DIP-SW6      is  SLOT2(B) state
-                        if( io43_id212(5) = '0' )then                           -- BIT[4]=0     of  Lock Mask
+                    if( ff_dip_req(5) /= ff_dip_ack(5) )then                    -- DIP-SW6      is  KEYMAP state
+                        if( io43_id212(5) = '0' )then                           -- BIT[5]=0     of  Lock Mask
                             swioKmapJ       <=  ff_dip_req(5);
                             ff_dip_ack(5)   <=  ff_dip_req(5);
                         end if;
