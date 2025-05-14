@@ -45,6 +45,7 @@ module eseps2 #(
     input           clkena,
 
     input           Kmap,
+    input           KmapJ,
 
     input           Caps,
     input           Kana,
@@ -507,13 +508,19 @@ module eseps2 #(
                 end
                 if( ff_e1_detect == 1'b1 && ff_f0_detect == 1'b1 && ff_ps2_rcv_dat == 8'h77 ) begin
                     //  Pause/Break == 'hE1:'h14:'h77:'hE1:'hF0:'h14:'hD0:'h77
-                    // ff_pause_toggle_key <= ~ff_pause_toggle_key;
-                    ff_reso_toggle_key <= ~ff_reso_toggle_key;
+                    if ( Kmap == 1'b1 || KmapJ == 1'b1 ) begin
+                        ff_pause_toggle_key <= ~ff_pause_toggle_key;
+                    end
+                    else begin
+                        ff_reso_toggle_key <= ~ff_reso_toggle_key;
+                    end
                 end
-                //if( ff_e1_detect == 1'b0 && ff_e0_detect == 1'b1 && ff_f0_detect == 1'b0 && ff_ps2_rcv_dat == 8'h7C ) begin
-                //    //  PrintScreen == 'hE0:'12:'hE0:'h7C (pressed), 'hE0:'hF0:'h7C:'hE0:'hF0:'h12 (released)
-                //    ff_reso_toggle_key <= ~ff_reso_toggle_key;
-                //end
+                if( ff_e1_detect == 1'b0 && ff_e0_detect == 1'b1 && ff_f0_detect == 1'b0 && ff_ps2_rcv_dat == 8'h7C ) begin
+                    //  PrintScreen == 'hE0:'12:'hE0:'h7C (pressed), 'hE0:'hF0:'h7C:'hE0:'hF0:'h12 (released)
+                    if ( Kmap == 1'b1 || KmapJ == 1'b1 ) begin
+                        ff_reso_toggle_key <= ~ff_reso_toggle_key;
+                    end
+                end
                 if( ff_e1_detect == 1'b0 && ff_e0_detect == 1'b0 && ff_f0_detect == 1'b0 && ff_ps2_rcv_dat == 8'h7E ) begin
                     //  ScrLk == 'h7E
                     ff_scrlk_toggle_key <= ~ff_scrlk_toggle_key;
@@ -726,7 +733,7 @@ module eseps2 #(
                     ff_matupd_state <= MATUPD_ST_KEYMAP_READ1;
                     ff_key_unpress  <= ff_f0_detect;
                     ff_e0_detect_dl <= ff_e0_detect;
-                    ff_keymap_index <= { Kmap, ~ff_shift_key & Kmap, ff_e0_detect, ff_ps2_rcv_dat };
+                    ff_keymap_index <= { Kmap, Kmap ? ~ff_shift_key : KmapJ, ff_e0_detect, ff_ps2_rcv_dat };
                     ff_matupd_ppi_c <= 1'b0;
                 end
                 else begin
@@ -757,7 +764,7 @@ module eseps2 #(
                 ff_matupd_state <= MATUPD_ST_KEYMAP_READ2;
                 ff_matupd_we    <= 1'b1;
                 ff_matupd_keys  <= w_matrix | w_mask;
-                ff_keymap_index <= { Kmap, ff_shift_key & Kmap, ff_e0_detect_dl, ff_ps2_rcv_dat };
+                ff_keymap_index <= { Kmap, Kmap ? ff_shift_key : KmapJ, ff_e0_detect_dl, ff_ps2_rcv_dat };
             end
             //  ここからは、現在押された/放されたキーに対応する MSXマトリクスのビットを適切な値で上書きする
             else if( ff_matupd_state == MATUPD_ST_KEYMAP_READ2 ) begin
