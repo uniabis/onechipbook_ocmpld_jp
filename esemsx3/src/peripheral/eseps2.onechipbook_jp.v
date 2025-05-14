@@ -726,7 +726,7 @@ module eseps2 #(
                     ff_matupd_state <= MATUPD_ST_KEYMAP_READ1;
                     ff_key_unpress  <= ff_f0_detect;
                     ff_e0_detect_dl <= ff_e0_detect;
-                    ff_keymap_index <= { ~Kmap, ~ff_shift_key & Kmap, ff_e0_detect, ff_ps2_rcv_dat };
+                    ff_keymap_index <= { Kmap, ~ff_shift_key & Kmap, ff_e0_detect, ff_ps2_rcv_dat };
                     ff_matupd_ppi_c <= 1'b0;
                 end
                 else begin
@@ -757,7 +757,7 @@ module eseps2 #(
                 ff_matupd_state <= MATUPD_ST_KEYMAP_READ2;
                 ff_matupd_we    <= 1'b1;
                 ff_matupd_keys  <= w_matrix | w_mask;
-                ff_keymap_index <= { ~Kmap, ff_shift_key & Kmap, ff_e0_detect_dl, ff_ps2_rcv_dat };
+                ff_keymap_index <= { Kmap, ff_shift_key & Kmap, ff_e0_detect_dl, ff_ps2_rcv_dat };
             end
             //  ここからは、現在押された/放されたキーに対応する MSXマトリクスのビットを適切な値で上書きする
             else if( ff_matupd_state == MATUPD_ST_KEYMAP_READ2 ) begin

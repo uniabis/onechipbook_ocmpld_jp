@@ -76,10 +76,181 @@ end keymap;
 
 architecture RTL of keymap is
 
-type rom_101 is array (0 to 1023) of std_logic_vector(7 downto 0);
-type rom_106 is array (0 to 511) of std_logic_vector(7 downto 0);
+type rom_keymap is array (0 to 2047) of std_logic_vector(7 downto 0);
 
-constant rom101 : rom_101 := (
+constant romkeymap : rom_keymap := (
+
+-- Special keys for OneChipBook Japanese Keyboard (Rotate)
+-- PS/2 KEYS              : MSX KEYS                            : OneChipBook.A KEYS 
+------------------------------------------------------------------------------------
+-- F6          ($0B)      : [GRAPH]     ($26) -> [HOME]  ($18) : [GRAPH]
+-- F7          ($83)      : [KANA]      ($46)                  : [KANA]
+-- F8          ($0A)      : [SELECT]    ($67)                  : [SELECT]
+-- End         ($E069)    : [STOP]      ($47)
+-- Home        ($E06C)    : [->]        ($18) -> [＼＿ろ]($52) : [(R)CTRL](CTRL->HOME)
+-- Katakana    ($13)      : [KANA]      ($46)
+-- Alt (L)     ($11)      : [GRAPH]     ($26)                  : [FN2]
+-- Alt (R)     ($E011)    : [GRAPH]     ($26)
+-- NumLock     ($77)      :             ($6A)
+-- PrtScr      ($E07C)    : DisplayMode ($6F) -> [STOP]  ($47) : (V)
+-- ScrollLock  ($7E)      :             ($7E)
+-- Pause       ($E11477)  : LedDebug?   ($6A) -> DisplayMode   : (T)
+-- Ctrl (L)    ($14)      : [CTRL]      ($16) -> [CAPS]  ($36) : [CTRL]
+-- Ctrl (R)    ($E014)    : [CTRL]      ($16)
+-- CapsLock    ($58)      : [CAPS]      ($36) -> [CTRL]  ($16) : [CAPS]
+-- Han/Zenkaku ($0E)      : [SELECT]    ($67) -> [1!]    ($10) : [`~]
+-- 1           ($16)      : [1!]        ($10) -> [2"]    ($20) : [1!]
+-- 2           ($1E)      : [2"]        ($20) -> [3#]    ($30) : [2@]
+-- 3           ($26)      : [3#]        ($30) -> [4$]    ($40) : [3#]
+-- 4           ($25)      : [4$]        ($40) -> [5%]    ($50) : [4$]
+-- 5           ($2E)      : [5%]        ($50) -> [6&]    ($60) : [5%]
+-- 6           ($36)      : [6&]        ($60) -> [7']    ($70) : [6^]
+-- 7           ($3D)      : [7']        ($70) -> [8(]    ($01) : [7&]
+-- 8           ($3E)      : [8(]        ($01) -> [9)]    ($11) : [8*]
+-- 9           ($46)      : [9)]        ($11) -> [0]     ($00) : [9(]
+-- 0           ($45)      : [0]         ($00) -> [-=]    ($21) : [0)]
+-- -           ($4E)      : [-=]        ($21) -> [^~]    ($31) : [-_]
+-- ^           ($55)      : [^~]        ($31) -> [￥｜ー]($41) : [=+]
+
+-- Keymap for 106 keyboard (set 2)
+--      PS/2 Scan Code XX
+        X"FF", X"3F", X"FF", X"17", X"76", X"56", X"66", X"0F", -- 00
+        X"FF", X"2F", X"67", X"18", X"07", X"37", X"10", X"FF", -- 08
+        X"FF", X"26", X"06", X"46", X"36", X"64", X"20", X"FF", -- 10
+        X"FF", X"FF", X"75", X"05", X"62", X"45", X"30", X"FF", -- 18
+        X"FF", X"03", X"55", X"13", X"23", X"50", X"40", X"FF", -- 20
+        X"FF", X"08", X"35", X"33", X"15", X"74", X"60", X"FF", -- 28
+        X"FF", X"34", X"72", X"53", X"43", X"65", X"70", X"FF", -- 30
+        X"FF", X"FF", X"24", X"73", X"25", X"01", X"11", X"FF", -- 38
+        X"FF", X"22", X"04", X"63", X"44", X"21", X"00", X"FF", -- 40
+        X"FF", X"32", X"42", X"14", X"71", X"54", X"31", X"FF", -- 48
+        X"FF", X"52", X"02", X"FF", X"51", X"41", X"FF", X"FF", -- 50
+        X"16", X"06", X"77", X"61", X"FF", X"12", X"FF", X"FF", -- 58
+        X"FF", X"41", X"FF", X"FF", X"1B", X"FF", X"57", X"3B", -- 60
+        X"FF", X"49", X"41", X"79", X"2A", X"FF", X"FF", X"FF", -- 68
+        X"39", X"7A", X"59", X"0A", X"1A", X"3A", X"27", X"6A", -- 70
+        X"1F", X"19", X"69", X"5A", X"09", X"4A", X"7E", X"FF", -- 78
+        X"FF", X"FF", X"FF", X"46", X"FF", X"FF", X"FF", X"FF", -- 80
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 88
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 90
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 98
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- A0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- A8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- B0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- B8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- C0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- C8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- D0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- D8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- F0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- F8
+
+--      PS/2 Scan Code E0 XX
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 00
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 08
+        X"FF", X"26", X"FF", X"FF", X"16", X"FF", X"FF", X"FF", -- 10
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"08", -- 18  (LWIN = 0x1F => SPACE)
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"08", -- 20  (RWIN = 0x27 => SPACE)
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"46", -- 28  (APP  = 0x2F => KANA )
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 30
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 38
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 40
+        X"FF", X"FF", X"29", X"FF", X"FF", X"FF", X"FF", X"FF", -- 48
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 50
+        X"FF", X"FF", X"77", X"FF", X"FF", X"FF", X"FF", X"FF", -- 58
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 60
+        X"FF", X"47", X"FF", X"48", X"52", X"FF", X"FF", X"FF", -- 68
+        X"28", X"38", X"68", X"FF", X"78", X"58", X"FF", X"FF", -- 70
+        X"FF", X"FF", X"4F", X"FF", X"47", X"5F", X"FF", X"FF", -- 78
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 80
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 88
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 90
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 98
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- A0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- A8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- B0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- B8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- C0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- C8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- D0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- D8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- F0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- F8
+
+-- reseved(copy)
+
+-- Keymap for 106 keyboard (set 2)
+--      PS/2 Scan Code XX
+        X"FF", X"3F", X"FF", X"17", X"76", X"56", X"66", X"0F", -- 00
+        X"FF", X"2F", X"67", X"18", X"07", X"37", X"10", X"FF", -- 08
+        X"FF", X"26", X"06", X"46", X"36", X"64", X"20", X"FF", -- 10
+        X"FF", X"FF", X"75", X"05", X"62", X"45", X"30", X"FF", -- 18
+        X"FF", X"03", X"55", X"13", X"23", X"50", X"40", X"FF", -- 20
+        X"FF", X"08", X"35", X"33", X"15", X"74", X"60", X"FF", -- 28
+        X"FF", X"34", X"72", X"53", X"43", X"65", X"70", X"FF", -- 30
+        X"FF", X"FF", X"24", X"73", X"25", X"01", X"11", X"FF", -- 38
+        X"FF", X"22", X"04", X"63", X"44", X"21", X"00", X"FF", -- 40
+        X"FF", X"32", X"42", X"14", X"71", X"54", X"31", X"FF", -- 48
+        X"FF", X"52", X"02", X"FF", X"51", X"41", X"FF", X"FF", -- 50
+        X"16", X"06", X"77", X"61", X"FF", X"12", X"FF", X"FF", -- 58
+        X"FF", X"41", X"FF", X"FF", X"1B", X"FF", X"57", X"3B", -- 60
+        X"FF", X"49", X"41", X"79", X"2A", X"FF", X"FF", X"FF", -- 68
+        X"39", X"7A", X"59", X"0A", X"1A", X"3A", X"27", X"6A", -- 70
+        X"1F", X"19", X"69", X"5A", X"09", X"4A", X"7E", X"FF", -- 78
+        X"FF", X"FF", X"FF", X"46", X"FF", X"FF", X"FF", X"FF", -- 80
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 88
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 90
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 98
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- A0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- A8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- B0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- B8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- C0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- C8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- D0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- D8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- F0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- F8
+
+--      PS/2 Scan Code E0 XX
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 00
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 08
+        X"FF", X"26", X"FF", X"FF", X"16", X"FF", X"FF", X"FF", -- 10
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"08", -- 18  (LWIN = 0x1F => SPACE)
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"08", -- 20  (RWIN = 0x27 => SPACE)
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"46", -- 28  (APP  = 0x2F => KANA )
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 30
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 38
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 40
+        X"FF", X"FF", X"29", X"FF", X"FF", X"FF", X"FF", X"FF", -- 48
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 50
+        X"FF", X"FF", X"77", X"FF", X"FF", X"FF", X"FF", X"FF", -- 58
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 60
+        X"FF", X"47", X"FF", X"48", X"52", X"FF", X"FF", X"FF", -- 68
+        X"28", X"38", X"68", X"FF", X"78", X"58", X"FF", X"FF", -- 70
+        X"FF", X"FF", X"4F", X"FF", X"47", X"5F", X"FF", X"FF", -- 78
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 80
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 88
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 90
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 98
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- A0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- A8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- B0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- B8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- C0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- C8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- D0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- D8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E8
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- F0
+        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- F8
 
 -- Japanese Key Matrix Table
 --
@@ -267,121 +438,14 @@ constant rom101 : rom_101 := (
         X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E8
         X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- F0
         X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF"  -- F8
-);
 
-constant rom106 : rom_106 := (
-
--- Special keys for OneChipBook Japanese Keyboard (Rotate)
--- PS/2 KEYS              : MSX KEYS                            : OneChipBook.A KEYS 
-------------------------------------------------------------------------------------
--- F6          ($0B)      : [GRAPH]     ($26) -> [HOME]  ($18) : [GRAPH]
--- F7          ($83)      : [KANA]      ($46)                  : [KANA]
--- F8          ($0A)      : [SELECT]    ($67)                  : [SELECT]
--- End         ($E069)    : [STOP]      ($47)
--- Home        ($E06C)    : [->]        ($18) -> [＼＿ろ]($52) : [(R)CTRL](CTRL->HOME)
--- Katakana    ($13)      : [KANA]      ($46)
--- Alt (L)     ($11)      : [GRAPH]     ($26)                  : [FN2]
--- Alt (R)     ($E011)    : [GRAPH]     ($26)
--- NumLock     ($77)      :             ($6A)
--- PrtScr      ($E07C)    : DisplayMode ($6F) -> [STOP]  ($47) : (V)
--- ScrollLock  ($7E)      :             ($7E)
--- Pause       ($E11477)  : LedDebug?   ($6A) -> DisplayMode   : (T)
--- Ctrl (L)    ($14)      : [CTRL]      ($16) -> [CAPS]  ($36) : [CTRL]
--- Ctrl (R)    ($E014)    : [CTRL]      ($16)
--- CapsLock    ($58)      : [CAPS]      ($36) -> [CTRL]  ($16) : [CAPS]
--- Han/Zenkaku ($0E)      : [SELECT]    ($67) -> [1!]    ($10) : [`~]
--- 1           ($16)      : [1!]        ($10) -> [2"]    ($20) : [1!]
--- 2           ($1E)      : [2"]        ($20) -> [3#]    ($30) : [2@]
--- 3           ($26)      : [3#]        ($30) -> [4$]    ($40) : [3#]
--- 4           ($25)      : [4$]        ($40) -> [5%]    ($50) : [4$]
--- 5           ($2E)      : [5%]        ($50) -> [6&]    ($60) : [5%]
--- 6           ($36)      : [6&]        ($60) -> [7']    ($70) : [6^]
--- 7           ($3D)      : [7']        ($70) -> [8(]    ($01) : [7&]
--- 8           ($3E)      : [8(]        ($01) -> [9)]    ($11) : [8*]
--- 9           ($46)      : [9)]        ($11) -> [0]     ($00) : [9(]
--- 0           ($45)      : [0]         ($00) -> [-=]    ($21) : [0)]
--- -           ($4E)      : [-=]        ($21) -> [^~]    ($31) : [-_]
--- ^           ($55)      : [^~]        ($31) -> [￥｜ー]($41) : [=+]
-
--- Keymap for 106 keyboard (set 2)
---      PS/2 Scan Code XX
-        X"FF", X"3F", X"FF", X"17", X"76", X"56", X"66", X"0F", -- 00
-        X"FF", X"2F", X"67", X"18", X"07", X"37", X"10", X"FF", -- 08
-        X"FF", X"26", X"06", X"46", X"36", X"64", X"20", X"FF", -- 10
-        X"FF", X"FF", X"75", X"05", X"62", X"45", X"30", X"FF", -- 18
-        X"FF", X"03", X"55", X"13", X"23", X"50", X"40", X"FF", -- 20
-        X"FF", X"08", X"35", X"33", X"15", X"74", X"60", X"FF", -- 28
-        X"FF", X"34", X"72", X"53", X"43", X"65", X"70", X"FF", -- 30
-        X"FF", X"FF", X"24", X"73", X"25", X"01", X"11", X"FF", -- 38
-        X"FF", X"22", X"04", X"63", X"44", X"21", X"00", X"FF", -- 40
-        X"FF", X"32", X"42", X"14", X"71", X"54", X"31", X"FF", -- 48
-        X"FF", X"52", X"02", X"FF", X"51", X"41", X"FF", X"FF", -- 50
-        X"16", X"06", X"77", X"61", X"FF", X"12", X"FF", X"FF", -- 58
-        X"FF", X"41", X"FF", X"FF", X"1B", X"FF", X"57", X"3B", -- 60
-        X"FF", X"49", X"41", X"79", X"2A", X"FF", X"FF", X"FF", -- 68
-        X"39", X"7A", X"59", X"0A", X"1A", X"3A", X"27", X"6A", -- 70
-        X"1F", X"19", X"69", X"5A", X"09", X"4A", X"7E", X"FF", -- 78
-        X"FF", X"FF", X"FF", X"46", X"FF", X"FF", X"FF", X"FF", -- 80
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 88
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 90
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 98
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- A0
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- A8
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- B0
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- B8
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- C0
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- C8
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- D0
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- D8
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E0
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E8
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- F0
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- F8
-
---      PS/2 Scan Code E0 XX
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 00
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 08
-        X"FF", X"26", X"FF", X"FF", X"16", X"FF", X"FF", X"FF", -- 10
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"08", -- 18  (LWIN = 0x1F => SPACE)
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"08", -- 20  (RWIN = 0x27 => SPACE)
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"46", -- 28  (APP  = 0x2F => KANA )
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 30
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 38
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 40
-        X"FF", X"FF", X"29", X"FF", X"FF", X"FF", X"FF", X"FF", -- 48
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 50
-        X"FF", X"FF", X"77", X"FF", X"FF", X"FF", X"FF", X"FF", -- 58
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 60
-        X"FF", X"47", X"FF", X"48", X"52", X"FF", X"FF", X"FF", -- 68
-        X"28", X"38", X"68", X"FF", X"78", X"58", X"FF", X"FF", -- 70
-        X"FF", X"FF", X"4F", X"FF", X"47", X"5F", X"FF", X"FF", -- 78
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 80
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 88
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 90
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- 98
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- A0
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- A8
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- B0
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- B8
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- C0
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- C8
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- D0
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- D8
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E0
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- E8
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", -- F0
-        X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF", X"FF"  -- F8
 );
 
   signal ff_dbi : std_logic_vector(7 downto 0);
 begin
   process (clk) begin
     if (clk'event and clk = '1') then
-      if( adr(10) = '0' ) then
-        ff_dbi <= rom101( conv_integer( adr(9 downto 0) ) );
-      else
-        ff_dbi <= rom106( conv_integer( adr(8 downto 0) ) );
-      end if;
+      ff_dbi <= romkeymap( conv_integer( adr(10 downto 0) ) );
     end if;
   end process;
 
