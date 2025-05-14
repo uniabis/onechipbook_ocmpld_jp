@@ -1,5 +1,5 @@
 --
--- keymap.onechipbook_jp.vhd [US-JP]
+-- keymap.onechipbook_jp_r.vhd [US-JP]
 --   keymap ROM tables for eseps2.onechipbook_jp.v
 --   Revision 1.00
 --
@@ -66,17 +66,17 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
-entity keymap is
+entity keymap_r is
   port (
     adr : in std_logic_vector(10 downto 0);
     clk : in std_logic;
     dbi : out std_logic_vector(7 downto 0)
   );
-end keymap;
+end keymap_r;
 
-architecture RTL of keymap is
+architecture RTL of keymap_r is
 
-type rom_keymap is array (0 to 2047) of std_logic_vector(7 downto 0);
+type rom_keymap_r is array (0 to 2047) of std_logic_vector(7 downto 0);
 
 -- Japanese Key Matrix Table
 --
@@ -116,39 +116,54 @@ type rom_keymap is array (0 to 2047) of std_logic_vector(7 downto 0);
 --       +-----+-----+-----+-----+-----+-----+-----+-----+
 -- bit     7 F   6 E   5 D   4 C   3 B   2 A   1 9   0 8
 
-constant romkeymap : rom_keymap := (
+constant romkeymap_r : rom_keymap_r := (
 
--- Special keys for OneChipBook Japanese Keyboard
--- PS/2 KEYS              : MSX KEYS                          : OneChipBook.A KEYS 
---------------------------------------------------------------------------------
--- F6          ($0B)      : [GRAPH]     ($26) -> [HOME] ($18) : [GRAPH]
--- F7          ($83)      : [KANA]      ($46)                 : [KANA]
--- F8          ($0A)      : [SELECT]    ($67)                 : [SELECT]
--- END         ($E069)    : [STOP]      ($47)
--- HOME        ($E06C)    : [->]        ($18) -> [ _ろ] ($52) : [(R)CTRL](CTRL->HOME)
--- Han/Zenkaku ($0E)      : [SELECT]    ($67) -> [\|- ] ($41) : [`~]
+-- Special keys for OneChipBook Japanese Keyboard (Rotate)
+-- PS/2 KEYS              : MSX KEYS                            : OneChipBook.A KEYS 
+------------------------------------------------------------------------------------
+-- F6          ($0B)      : [GRAPH]     ($26) -> [HOME]  ($18) : [GRAPH]
+-- F7          ($83)      : [KANA]      ($46)                  : [KANA]
+-- F8          ($0A)      : [SELECT]    ($67)                  : [SELECT]
+-- End         ($E069)    : [STOP]      ($47)
+-- Home        ($E06C)    : [->]        ($18) -> [＼＿ろ]($52) : [(R)CTRL](CTRL->HOME)
 -- Katakana    ($13)      : [KANA]      ($46)
--- ALT L       ($11)      : [GRAPH]     ($26)                 : [FN2]
--- ALT R       ($E011)    : [GRAPH]     ($26)
+-- Alt (L)     ($11)      : [GRAPH]     ($26)                  : [FN2]
+-- Alt (R)     ($E011)    : [GRAPH]     ($26)
 -- NumLock     ($77)      :             ($6A)
--- PrtScr      ($E07C)    : DisplayMode ($6F) -> [STOP] ($47) : (V)
+-- PrtScr      ($E07C)    : DisplayMode ($6F) -> [STOP]  ($47) : (V)
 -- ScrollLock  ($7E)      :             ($7E)
--- Pause       ($E11477)  : Pause       ($6A) -> DisplayMode  : (T)
+-- Pause       ($E11477)  : LedDebug?   ($6A) -> DisplayMode   : (T)
+-- Ctrl (L)    ($14)      : [CTRL]      ($16) -> [CAPS]  ($36) : [CTRL]
+-- Ctrl (R)    ($E014)    : [CTRL]      ($16)
+-- CapsLock    ($58)      : [CAPS]      ($36) -> [CTRL]  ($16) : [CAPS]
+-- Han/Zenkaku ($0E)      : [SELECT]    ($67) -> [1!]    ($10) : [`~]
+-- 1           ($16)      : [1!]        ($10) -> [2"]    ($20) : [1!]
+-- 2           ($1E)      : [2"]        ($20) -> [3#]    ($30) : [2@]
+-- 3           ($26)      : [3#]        ($30) -> [4$]    ($40) : [3#]
+-- 4           ($25)      : [4$]        ($40) -> [5%]    ($50) : [4$]
+-- 5           ($2E)      : [5%]        ($50) -> [6&]    ($60) : [5%]
+-- 6           ($36)      : [6&]        ($60) -> [7']    ($70) : [6^]
+-- 7           ($3D)      : [7']        ($70) -> [8(]    ($01) : [7&]
+-- 8           ($3E)      : [8(]        ($01) -> [9)]    ($11) : [8*]
+-- 9           ($46)      : [9)]        ($11) -> [0]     ($00) : [9(]
+-- 0           ($45)      : [0]         ($00) -> [-=]    ($21) : [0)]
+-- -           ($4E)      : [-=]        ($21) -> [^~]    ($31) : [-_]
+-- ^           ($55)      : [^~]        ($31) -> [￥｜ー]($41) : [=+]
 
 -- Keymap for 106 keyboard (set 2)
 --      PS/2 Scan Code XX
         X"FF", X"3F", X"FF", X"17", X"76", X"56", X"66", X"0F", -- 00
-        X"FF", X"2F", X"67", X"18", X"07", X"37", X"41", X"FF", -- 08
-        X"FF", X"26", X"06", X"46", X"16", X"64", X"10", X"FF", -- 10
-        X"FF", X"FF", X"75", X"05", X"62", X"45", X"20", X"FF", -- 18
-        X"FF", X"03", X"55", X"13", X"23", X"40", X"30", X"FF", -- 20
-        X"FF", X"08", X"35", X"33", X"15", X"74", X"50", X"FF", -- 28
-        X"FF", X"34", X"72", X"53", X"43", X"65", X"60", X"FF", -- 30
-        X"FF", X"FF", X"24", X"73", X"25", X"70", X"01", X"FF", -- 38
-        X"FF", X"22", X"04", X"63", X"44", X"00", X"11", X"FF", -- 40
-        X"FF", X"32", X"42", X"14", X"71", X"54", X"21", X"FF", -- 48
-        X"FF", X"52", X"02", X"FF", X"51", X"31", X"FF", X"FF", -- 50
-        X"36", X"06", X"77", X"61", X"FF", X"12", X"FF", X"FF", -- 58
+        X"FF", X"2F", X"67", X"18", X"07", X"37", X"10", X"FF", -- 08
+        X"FF", X"26", X"06", X"46", X"36", X"64", X"20", X"FF", -- 10
+        X"FF", X"FF", X"75", X"05", X"62", X"45", X"30", X"FF", -- 18
+        X"FF", X"03", X"55", X"13", X"23", X"50", X"40", X"FF", -- 20
+        X"FF", X"08", X"35", X"33", X"15", X"74", X"60", X"FF", -- 28
+        X"FF", X"34", X"72", X"53", X"43", X"65", X"70", X"FF", -- 30
+        X"FF", X"FF", X"24", X"73", X"25", X"01", X"11", X"FF", -- 38
+        X"FF", X"22", X"04", X"63", X"44", X"21", X"00", X"FF", -- 40
+        X"FF", X"32", X"42", X"14", X"71", X"54", X"31", X"FF", -- 48
+        X"FF", X"52", X"02", X"FF", X"51", X"41", X"FF", X"FF", -- 50
+        X"16", X"06", X"77", X"61", X"FF", X"12", X"FF", X"FF", -- 58
         X"FF", X"41", X"FF", X"FF", X"1B", X"FF", X"57", X"3B", -- 60
         X"FF", X"49", X"41", X"79", X"2A", X"FF", X"FF", X"FF", -- 68
         X"39", X"7A", X"59", X"0A", X"1A", X"3A", X"27", X"6A", -- 70
@@ -440,7 +455,7 @@ constant romkeymap : rom_keymap := (
 begin
   process (clk) begin
     if (clk'event and clk = '1') then
-      ff_dbi <= romkeymap( conv_integer( adr(10 downto 0) ) );
+      ff_dbi <= romkeymap_r( conv_integer( adr(10 downto 0) ) );
     end if;
   end process;
 

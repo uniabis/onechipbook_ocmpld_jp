@@ -36,6 +36,8 @@
 // Apl-24-2022 2.00 - Newly redesigned by t.hara
 //------------------------------------------------------------------------------
 
+`define ONECHIPBOOK_JP_ROTATE;
+
 module eseps2 #(
     parameter       numlk_is_kana   = 1'b1,     //  NumLk LED mode      1'b0: NumLk, 1'b1: Kana
     parameter       numlk_initial   = 1'b1      //  NumLk initial value 1'b0: OFF  , 1'b1: ON
@@ -856,11 +858,19 @@ module eseps2 #(
     assign w_matrix[0]      = ((Kmap == 1'b1) && (ff_matupd_rows == 4'd6)) ? ~ff_ps2_virtual_shift :        // Other Keymap
                               w_matrix_pre[0];
 
+`ifdef ONECHIPBOOK_JP_ROTATE
+    keymap_r u_keymap_r (
+    .adr    ( ff_keymap_index   ),
+    .clk    ( clk21m            ),
+    .dbi    ( w_keymap_dat      )
+    );
+`else
     keymap u_keymap (
     .adr    ( ff_keymap_index   ),
     .clk    ( clk21m            ),
     .dbi    ( w_keymap_dat      )
     );
+`endif
 
 //  assign debug_sig    = { Caps, Kana, CmtScro, ff_numlk_key,3'd0, ff_ps2_sub_state, ff_ps2_state };
 endmodule
