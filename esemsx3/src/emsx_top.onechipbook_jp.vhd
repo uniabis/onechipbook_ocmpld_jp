@@ -726,7 +726,7 @@ architecture RTL of emsx_top is
     signal  hybtoutcnt      : std_logic_vector(  2 downto 0 );
     signal  reset           : std_logic;
     signal  RstSeq          : std_logic_vector(  4 downto 0 ) := (others => '0');
-    signal  FreeCounter     : std_logic_vector( 15 downto 0 ) := (others => '0');
+    signal  FreeCounter     : std_logic_vector( 15 downto 0 ) := X"0001";
     signal  HardRst_cnt     : std_logic_vector(  3 downto 0 ) := (others => '0');
     signal  LogoRstCnt      : std_logic_vector(  5 downto 0 ) := (others => '0');
     signal  logo_timeout    : std_logic_vector(  1 downto 0 );
@@ -1274,7 +1274,7 @@ begin
     begin
         if( memclk'event and memclk = '1' )then
             if( ff_mem_seq = "00" )then
-                FreeCounter <= FreeCounter + 1;
+                FreeCounter( 15 downto 0 ) <= FreeCounter( 14 downto 0 ) & (FreeCounter(15) xor FreeCounter(13) xor FreeCounter(12) xor FreeCounter(10));
             end if;
         end if;
     end process;
@@ -1310,7 +1310,7 @@ begin
             if( HardRst_cnt = "0010" or bios_reload_ack = '1' )then                     -- long click > 800ms
                 RstSeq <= "00000";                                                      -- RstSeq is required
                 ff_reload_n <= '0';                                                     -- OCM-BIOS is partial
-            elsif( ff_mem_seq = "00" and FreeCounter = X"FFFF" and RstSeq /= "11111" )then
+            elsif( ff_mem_seq = "00" and FreeCounter = X"0001" and RstSeq /= "11111" )then
                 RstSeq <= RstSeq + 1;                                                   -- 3ms (= 65536 / 21.48MHz)
             elsif( ff_ldbios_n = '1' )then
                 ff_reload_n <= '1';                                                     -- OCM-BIOS is complete
