@@ -726,7 +726,12 @@ architecture RTL of emsx_top is
     signal  hybtoutcnt      : std_logic_vector(  2 downto 0 );
     signal  reset           : std_logic;
     signal  RstSeq          : std_logic_vector(  4 downto 0 ) := (others => '0');
-    signal  FreeCounter     : std_logic_vector( 15 downto 0 ) := X"0001";
+    constant FreeCounterStart   : std_logic_vector( 16 downto 0 ) := '0' & X"0102";
+    constant FreeCounterEnd     : std_logic_vector( 16 downto 0 ) := '0' & X"0001";
+    signal  FreeCounter         : std_logic_vector( 16 downto 0 ) := FreeCounterStart;
+    signal  FreeCounter_LFSR    : std_logic_vector( 16 downto 0 );
+    signal  FreeCounter_Timeout : std_logic;
+    signal  FreeCounter_Hi      : std_logic_vector( 5 downto 0 ) := "000000";
     signal  HardRst_cnt     : std_logic_vector(  3 downto 0 ) := (others => '0');
     signal  LogoRstCnt      : std_logic_vector(  5 downto 0 ) := (others => '0');
     signal  logo_timeout    : std_logic_vector(  1 downto 0 );
@@ -966,7 +971,6 @@ architecture RTL of emsx_top is
     signal  ff_mem_seq      : std_logic_vector(  1 downto 0 );
 
     -- Operation mode
-    signal  ff_clk21m_cnt   : std_logic_vector( 20 downto 0 ) := (others => '0');   -- free run counter
     signal  GreenLv         : std_logic_vector(  6 downto 0 );                      -- green level
     signal  GreenLv_cnt     : std_logic_vector(  3 downto 0 );                      -- green level counter
 
@@ -1097,7 +1101,7 @@ begin
         if( reset = '1' )then
             hybstartcnt <= (others => '0');
         elsif( clk21m'event and clk21m = '1' )then
-            if( ff_clk21m_cnt( 16 downto 0 ) = "00000000000000000" )then
+            if( FreeCounter_Timeout = '1' and FreeCounter_Hi(0) = '0' )then
                 if( mmcena = '0' )then
                     hybstartcnt <= "111";                                               -- begin after 48ms
                 elsif( hybstartcnt /= "000" )then
@@ -1116,7 +1120,7 @@ begin
             if( hybstartcnt = "000" or hybtoutcnt /= "000" )then
                 if( mmcena = '1' )then
                     hybtoutcnt <= "111";                                                -- timeout after 96ms
-                elsif( ff_clk21m_cnt( 17 downto 0 ) = "000000000000000000" )then
+                elsif( FreeCounter_Timeout = '1' and FreeCounter_Hi(1 downto 0) = "00" )then
                     hybtoutcnt <= hybtoutcnt - 1;
                 end if;
             end if;
@@ -1270,11 +1274,19 @@ begin
         end if;
     end process;
 
+    FreeCounter_LFSR <= FreeCounter( 15 downto 0 ) & (FreeCounter(16) xor FreeCounter(13));
+    FreeCounter_Timeout <= '1' when FreeCounter = FreeCounterEnd else '0';
+
     process( memclk )
     begin
         if( memclk'event and memclk = '1' )then
             if( ff_mem_seq = "00" )then
-                FreeCounter( 15 downto 0 ) <= FreeCounter( 14 downto 0 ) & (FreeCounter(15) xor FreeCounter(13) xor FreeCounter(12) xor FreeCounter(10));
+                if( FreeCounter_Timeout = '1' )then
+                    FreeCounter <= FreeCounterStart;
+                    FreeCounter_Hi <= FreeCounter_Hi + 1;
+                else
+                    FreeCounter <= FreeCounter_LFSR;
+                end if;
             end if;
         end if;
     end process;
@@ -1310,7 +1322,7 @@ begin
             if( HardRst_cnt = "0010" or bios_reload_ack = '1' )then                     -- long click > 800ms
                 RstSeq <= "00000";                                                      -- RstSeq is required
                 ff_reload_n <= '0';                                                     -- OCM-BIOS is partial
-            elsif( ff_mem_seq = "00" and FreeCounter = X"0001" and RstSeq /= "11111" )then
+            elsif( ff_mem_seq = "00" and FreeCounter_Timeout = '1' and RstSeq /= "11111" )then
                 RstSeq <= RstSeq + 1;                                                   -- 3ms (= 65536 / 21.48MHz)
             elsif( ff_ldbios_n = '1' )then
                 ff_reload_n <= '1';                                                     -- OCM-BIOS is complete
@@ -1344,7 +1356,7 @@ begin
     process( memclk )
     begin
         if( memclk'event and memclk = '1' )then
-            if( ff_clk21m_cnt( 19 downto 15 ) = "11001" )then                           -- about 38ms
+            if( RstSeq = "11001" )then                           -- about 39.7ms (= 13 * 65536 / 21.48MHz)
                 power_on_reset <= '1';
             end if;
         end if;
@@ -1353,14 +1365,6 @@ begin
     ----------------------------------------------------------------
     -- Operation mode
     ----------------------------------------------------------------
-
-    -- free run counter
-    process( clk21m )
-    begin
-        if( clk21m'event and clk21m = '1' )then
-            ff_clk21m_cnt <= ff_clk21m_cnt + 1;
-        end if;
-    end process;
 
     -- w_10hz with LFSR counter = 100ms
     -- http://outputlogic.com/?page_id=275
@@ -1426,7 +1430,7 @@ begin
     process( clk21m )
     begin
         if( clk21m'event and clk21m = '1' )then
-            Blink_s <= ff_clk21m_cnt(20) or (not ff_clk21m_cnt(19));
+            Blink_s <= FreeCounter_Hi(5) or (not FreeCounter_Hi(4));
             if( Blink_ena = '1' and MmcEna = '1' )then
                 MmcEnaLed <= Blink_s;
             elsif( Blink_ena = '0' and LightsMode = '0' )then
