@@ -1,0 +1,3 @@
+[submodule "ocm-pld-dev"]
+	path = ocm-pld-dev
+	url = https://github.com/gnogni/ocm-pld-dev.git
