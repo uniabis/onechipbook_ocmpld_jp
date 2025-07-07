@@ -1,6 +1,6 @@
 --
--- swioports.vhd
---   Switched I/O ports ($40-$4F) MSX++ 1st Gen
+-- swioports.onechipbook_jp.vhd
+--   Switched I/O ports ($40-$4F) MSX++ 1st Gen OneChipBook Japanese
 --   Revision 12
 --
 -- Copyright (c) 2011-2025 KdL
@@ -73,6 +73,7 @@ entity switched_io_ports is
 
         io41_id008_n    : inout std_logic;                                  -- $41 ID008 BIT-0 state    :   0=5.37MHz, 1=3.58MHz (write_n only)
         swioKmap        : inout std_logic;                                  -- Keyboard layout selector
+        swioKmapJ       : inout std_logic;                                  -- Japanese Keyboard layout selector for OneChipBook Japanese
         CmtScro         : inout std_logic;                                  -- CMT state
         swioCmt         : inout std_logic;                                  -- CMT enabler              :   This toggle is used for the Internal OPL3 on SM-X, SX-2 and SX-E
         LightsMode      : inout std_logic;                                  -- Custom green led states
@@ -254,7 +255,10 @@ begin
                 if( warmRESET /= '1' )then
                     -- Cold Reset
 --                  io41_id212_n    <=  "00000000";         -- Smart Commands will be zero at 1st boot
-                    io42_id212      <=  ff_dip_req;         -- Virtual DIP-SW are DIP-SW
+                    io42_id212(5)   <= '0';
+                    swioKmapJ       <= ff_dip_req(5);
+                    io42_id212(4 downto 0) <=  ff_dip_req(4 downto 0); -- Virtual DIP-SW are DIP-SW
+                    io42_id212(7 downto 6) <=  ff_dip_req(7 downto 6);
                     ff_dip_ack      <=  ff_dip_req;         -- Sync to its req
                     io43_id212      <=  "00X00000";         -- Lock Mask is Full Unlocked
                     io44_id212      <=  "00000000";         -- Lights Mask is Full Off / d-ID = $00
@@ -363,18 +367,18 @@ begin
                             iSlt1_linear    <=  '0';
                         end if;
                     end if;
-                    if( ff_dip_req(4) /= ff_dip_ack(4) )then                    -- DIP-SW5      is  SLOT2(A) state
+                    if( ff_dip_req(4) /= ff_dip_ack(4) )then                    -- DIP-SW5      is  SLOT2 state
                         if( io43_id212(4) = '0' )then                           -- BIT[4]=0     of  Lock Mask
                             io42_id212(4)   <=  ff_dip_req(4);
+                            io42_id212(5)   <=  '0';
                             ff_dip_ack(4)   <=  ff_dip_req(4);
                             iSlt2_linear    <=  '0';
                         end if;
                     end if;
-                    if( ff_dip_req(5) /= ff_dip_ack(5) )then                    -- DIP-SW6      is  SLOT2(B) state
-                        if( io43_id212(4) = '0' )then                           -- BIT[4]=0     of  Lock Mask
-                            io42_id212(5)   <=  ff_dip_req(5);
+                    if( ff_dip_req(5) /= ff_dip_ack(5) )then                    -- DIP-SW6      is  KEYMAP state
+                        if( io43_id212(5) = '0' )then                           -- BIT[5]=0     of  Lock Mask
+                            swioKmapJ       <=  ff_dip_req(5);
                             ff_dip_ack(5)   <=  ff_dip_req(5);
-                            iSlt2_linear    <=  '0';
                         end if;
                     end if;
                     if( ff_dip_req(6) /= ff_dip_ack(6) )then                    -- DIP-SW7      is  MAPPER state
@@ -1080,7 +1084,9 @@ begin
                             when "11111111" =>                                  -- Restore All Defaults + Reserve Default Mapper & MegaSD
                                 RatioMode               <=  "000";
                                 bios_reload_req         <=  '0';
-                                io42_id212(5 downto 0)  <=  ff_dip_req(5 downto 0);
+                                swioKmapJ               <=  ff_dip_req(5);
+                                io42_id212(5)           <=  '0';
+                                io42_id212(4 downto 0)  <=  ff_dip_req(4 downto 0);
                                 ff_dip_ack(5 downto 0)  <=  ff_dip_req(5 downto 0);
                                 io43_id212              <=  "00000000";
                                 io44_id212              <=  "00000000";

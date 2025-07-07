@@ -1,5 +1,5 @@
 --
--- emsx_top.vhd
+-- emsx_top.onechipbook_jp.vhd
 --   ESE MSX-SYSTEM3 / MSX clone on a Cyclone FPGA (ALTERA)
 --   Revision 1.00
 --
@@ -31,10 +31,11 @@
 --
 ----------------------------------------------------------------------------------
 -- OCM-PLD Pack v3.9.2 by KdL (2025.06.29)
--- MSX2+ Stable Release for Zemmix Neo (KR), Zemmix Neo BR and SX-1 (regular)
 -- Special thanks to t.hara, caro, mygodess & all MRC users [https://www.msx.org]
 ----------------------------------------------------------------------------------
 -- Setup for XTAL 21.47727MHz
+----------------------------------------------------------------------------------
+-- MSX2 Experimental Release for OneChipBook Japanese
 ----------------------------------------------------------------------------------
 --
 
@@ -263,6 +264,7 @@ architecture RTL of emsx_top is
             clkena      : in     std_logic;
 
             Kmap        : in     std_logic;
+            KmapJ       : in     std_logic;
 
             Caps        : inout  std_logic;
             Kana        : inout  std_logic;
@@ -569,6 +571,7 @@ architecture RTL of emsx_top is
 
             io41_id008_n    : inout std_logic;                                  -- $41 ID008 BIT-0 state    :   0=5.37MHz, 1=3.58MHz (write_n only)
             swioKmap        : inout std_logic;                                  -- Keyboard layout selector
+            swioKmapJ       : inout std_logic;                                  -- Japanese Keyboard layout selector for OneChipBook
             CmtScro         : inout std_logic;                                  -- CMT state
             swioCmt         : inout std_logic;                                  -- CMT enabler              :   This toggle is used for the Internal OPL3 on SM-X, SX-2 and SX-E
             LightsMode      : inout std_logic;                                  -- Custom green led states
@@ -674,6 +677,7 @@ architecture RTL of emsx_top is
     signal  MegaSD_ack      : std_logic;
     signal  io41_id008_n    : std_logic;
     signal  swioKmap        : std_logic;
+    signal  swioKmapJ       : std_logic;
     signal  CmtScro         : std_logic := '0';
     signal  swioCmt         : std_logic := '0';
     signal  LightsMode      : std_logic;
@@ -723,6 +727,7 @@ architecture RTL of emsx_top is
     -- Operation mode
     signal  w_key_mode      : std_logic;                                            -- Kana keyboard layout: 1=JIS layout (PSG)
     signal  Kmap            : std_logic;                                            -- '0': Japanese-106    '1': Non-Japanese (English-101, French, ..)
+    signal  KmapJ           : std_logic;
     signal  DisplayMode     : std_logic_vector(  1 downto 0 ) := "10";
     signal  odd_line_s      : std_logic := '0';
     signal  Slot1Mode       : std_logic;
@@ -1219,6 +1224,7 @@ begin
     begin
         if( clk21m'event and clk21m = '1' )then
             Kmap            <=  swioKmap;                                               -- keyboard layout assignment
+            KmapJ           <=  swioKmapJ;
             CmtScro         <=  swioCmt;
             DisplayMode(1)  <=  io42_id212(1);
             DisplayMode(0)  <=  io42_id212(2);
@@ -2786,7 +2792,7 @@ begin
                         MapRam, MapWrt, MapAdr, RamDbi, open);
 
     U06 : eseps2
-        port map(clk21m, reset, clkena, Kmap, Caps, Kana, Paus, Scro, Reso, Fkeys,
+        port map(clk21m, reset, clkena, Kmap, KmapJ, Caps, Kana, Paus, Scro, Reso, Fkeys,
                         pPs2Clk, pPs2Dat, PpiPortC, PpiPortB, CmtScro);
 
     U07 : rtc
@@ -2931,6 +2937,7 @@ begin
 
             io41_id008_n    => io41_id008_n     ,
             swioKmap        => swioKmap         ,
+            swioKmapJ       => swioKmapJ        ,
             CmtScro         => CmtScro          ,
             swioCmt         => swioCmt          ,
             LightsMode      => LightsMode       ,

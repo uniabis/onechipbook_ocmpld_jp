@@ -1,6 +1,6 @@
 //
-// eseps2.v
-//   PS/2 keyboard interface for OCM-PLD/OCM-Kai
+// eseps2.onechipbook_jp.v
+//   PS/2 keyboard interface for OneChipBook Japanese
 //   Revision 2.00
 //
 // Copyright (c) 2022 Takayuki Hara (HRA!)
@@ -44,6 +44,8 @@
 //                    * LFSR to reduce LEs
 //------------------------------------------------------------------------------
 
+`define ONECHIPBOOK_JP_ROTATE;
+
 module eseps2 #(
     parameter       numlk_is_kana   = 1'b1,     //  NumLk LED mode      1'b0: NumLk, 1'b1: Kana
     parameter       numlk_initial   = 1'b1      //  NumLk initial value 1'b0: OFF  , 1'b1: ON
@@ -53,6 +55,7 @@ module eseps2 #(
     input           clkena,
 
     input           Kmap,
+    input           KmapJ,
 
     input           Caps,
     input           Kana,
@@ -514,11 +517,18 @@ module eseps2 #(
                 end
                 if( ff_e1_detect == 1'b1 && ff_f0_detect == 1'b1 && ff_ps2_rcv_dat == 8'h77 ) begin
                     //  Pause/Break == 'hE1:'h14:'h77:'hE1:'hF0:'h14:'hD0:'h77
-                    ff_pause_toggle_key <= ~ff_pause_toggle_key;
+                    if ( Kmap == 1'b1 || KmapJ == 1'b1 ) begin
+                        ff_pause_toggle_key <= ~ff_pause_toggle_key;
+                    end
+                    else begin
+                        ff_reso_toggle_key <= ~ff_reso_toggle_key;
+                    end
                 end
                 if( ff_e1_detect == 1'b0 && ff_e0_detect == 1'b1 && ff_f0_detect == 1'b0 && ff_ps2_rcv_dat == 8'h7C ) begin
                     //  PrintScreen == 'hE0:'12:'hE0:'h7C (pressed), 'hE0:'hF0:'h7C:'hE0:'hF0:'h12 (released)
-                    ff_reso_toggle_key <= ~ff_reso_toggle_key;
+                    if ( Kmap == 1'b1 || KmapJ == 1'b1 ) begin
+                        ff_reso_toggle_key <= ~ff_reso_toggle_key;
+                    end
                 end
                 if( ff_e1_detect == 1'b0 && ff_e0_detect == 1'b0 && ff_f0_detect == 1'b0 && ff_ps2_rcv_dat == 8'h7E ) begin
                     //  ScrLk == 'h7E
@@ -731,7 +741,7 @@ module eseps2 #(
                 if( w_clkena && (ff_ps2_state == PS2_ST_RCV_SCAN) && (ff_ps2_sub_state == PS2_SUB_WAIT) && !ff_e1_detect ) begin
                     ff_matupd_state <= Kmap == 1'b1 ? MATUPD_ST_KEYMAP_READ1 : MATUPD_ST_KEYMAP_READ2;
                     ff_key_unpress  <= ff_f0_detect;
-                    ff_keymap_index <= { ~Kmap, ~ff_shift_key & Kmap, ff_e0_detect, ff_ps2_rcv_dat };
+                    ff_keymap_index <= { Kmap, Kmap ? ~ff_shift_key : KmapJ, ff_e0_detect, ff_ps2_rcv_dat };
                     ff_matupd_ppi_c <= 1'b0;
                 end
                 else begin
@@ -855,11 +865,19 @@ module eseps2 #(
     assign w_matrix[0]      = ((Kmap == 1'b1) && (ff_matupd_rows == 4'd6)) ? ~ff_ps2_virtual_shift :        // Other Keymap
                               w_matrix_pre[0];
 
+`ifdef ONECHIPBOOK_JP_ROTATE
+    keymap_r u_keymap_r (
+    .adr    ( ff_keymap_index   ),
+    .clk    ( clk21m            ),
+    .dbi    ( w_keymap_dat      )
+    );
+`else
     keymap u_keymap (
     .adr    ( ff_keymap_index   ),
     .clk    ( clk21m            ),
     .dbi    ( w_keymap_dat      )
     );
+`endif
 
 //  assign debug_sig    = { Caps, Kana, CmtScro, ff_numlk_key,3'd0, ff_ps2_sub_state, ff_ps2_state };
 endmodule
