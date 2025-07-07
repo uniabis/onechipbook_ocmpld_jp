@@ -18,7 +18,7 @@ MSXライセンシングコーポレーションに変更されております�
 OCMPLDにはSDカードからBIOSを読み込む仕組みがあるため、
 SDカードにSDBIOSイメージを置くことでMSX2+化が可能です。
 
-### 0.0.xR 日本語キーマップ
+### 0.0.3R 日本語キーマップ
 
 | OCBook.A  | PS/2       | PS/2ScanCode | MSX (0.0.xR)                  |
 | --------- | ---------- | ------------ | ----------------------------- |
@@ -44,7 +44,7 @@ SDカードにSDBIOSイメージを置くことでMSX2+化が可能です。
 
 右[CTRL]は[FN]+[F3]のメニューで[HOME]に設定する前提
 
-### 0.0.x 日本語キーマップ
+### 0.0.3 日本語キーマップ
 
 | OCBook.A  | PS/2     | PS/2ScanCode | MSX (0.0.x)                   |
 | --------- | -------- | ------------ | ----------------------------- |
@@ -70,6 +70,10 @@ FPGA側でキー割り当てを変更しているため外部PS/2キーボード
 DIP-SW 5をONにした場合は OneChipBook内部拡張スロットが切り離されます。
 ASCIIマッパーに変更したい場合は起動後にI/Oポートで切り替えます。
 
+
+## 変更内容(0.0.3/0.0.3R)
+
+### OCM-PLD v3.9.2ベースに変更
 
 ## 変更内容(0.0.2/0.0.2R)
 
@@ -127,9 +131,10 @@ Quartus II v11.0sp1 web edition 以前が必要です。
 
 ## ライセンス等
 
-### OCMPLD
+### OCM-PLD
 
-[history.msxplusplus.txt](https://raw.githubusercontent.com/uniabis/onechipbook_ocmpld_jp/refs/heads/master/history.msxplusplus.txt)(history.txtから改名)参照
+[Kdl Index!](https://gnogni.altervista.org/)
+[OCM-PLD-DEV on GitHub](https://github.com/gnogni/ocm-pld-dev)
 
 ### 1chipMSX
 
