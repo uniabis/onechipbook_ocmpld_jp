@@ -1,9 +1,10 @@
 /db
 /incremental_db
-emsx_top.done
-emsx_top.pin
-emsx_top.pof
-emsx_top.rbf
-emsx_top.sof
-*.rpt
-*.summary
+/emsx_top.done
+/emsx_top.map
+/emsx_top.pin
+/emsx_top.pof
+/emsx_top.rbf
+/emsx_top.sof
+/*.rpt
+/*.summary
