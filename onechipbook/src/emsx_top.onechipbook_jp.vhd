@@ -2041,9 +2041,9 @@ begin
     V9938_n <= '1';         -- '1' is TH9958 VDP core
 
     process( clk21m )
-        variable r_v : unsigned(  5 downto 0 );
-        variable g_v : unsigned(  5 downto 0 );
-        variable b_v : unsigned(  5 downto 0 );
+        variable r_v : unsigned(  4 downto 0 );
+        variable g_v : unsigned(  4 downto 0 );
+        variable b_v : unsigned(  4 downto 0 );
     begin
         if( clk21m'event and clk21m = '1' )then
             case DisplayMode is
@@ -2057,18 +2057,18 @@ begin
 --                  legacy_vga  <= '0';                             -- behaves like vAllow_n        (for V9938 VDP core)
 
                 when "01" =>                                        -- RGB 15kHz
-                    pDac_VR     <= VideoR;                          -- 100% Brightness
-                    pDac_VG     <= VideoG;
-                    pDac_VB     <= VideoB;
+                    pDac_VR     <= "0" & VideoR( 5 downto 1 );      -- 100% Brightness
+                    pDac_VG     <= "0" & VideoG( 5 downto 1 );
+                    pDac_VB     <= "0" & VideoB( 5 downto 1 );
                     Reso_v      <= '0';                             -- Hsync:15kHz
                     pVideoHS_n  <= VideoCS_n;                       -- CSync Enabled
                     pVideoVS_n  <= DACout;                          -- Audio Out (Mono)
 --                  legacy_vga  <= '0';                             -- behaves like vAllow_n        (for V9938 VDP core)
 
                 when others =>                                      -- VGA / VGA+ 31kHz
-                    pDac_VR     <= VideoR;                          -- 100% Brightness
-                    pDac_VG     <= VideoG;
-                    pDac_VB     <= VideoB;
+                    pDac_VR     <= "0" & VideoR( 5 downto 1 );      -- 100% Brightness
+                    pDac_VG     <= "0" & VideoG( 5 downto 1 );
+                    pDac_VB     <= "0" & VideoB( 5 downto 1 );
                     Reso_v      <= '1';                             -- Hsync:31kHz
                     pVideoHS_n  <= VideoHS_n;
                     pVideoVS_n  <= VideoVS_n;
@@ -2086,25 +2086,25 @@ begin
 
                     if( vga_scanlines = "11" )then
                         -- VGA Scanlines 50% of 6-bit DAC full-scale brightness
-                        pDac_VR <= "0" & VideoR(  5 downto 1 );
-                        pDac_VG <= "0" & VideoG(  5 downto 1 );
-                        pDac_VB <= "0" & VideoB(  5 downto 1 );
+                        pDac_VR <= "00" & VideoR(  5 downto 2 );
+                        pDac_VG <= "00" & VideoG(  5 downto 2 );
+                        pDac_VB <= "00" & VideoB(  5 downto 2 );
                     elsif( vga_scanlines = "10" )then
                         -- VGA Scanlines 25% of 6-bit DAC full-scale brightness
-                        r_v := unsigned(VideoR) - unsigned("00" & VideoR(  5 downto 2 ));
-                        g_v := unsigned(VideoG) - unsigned("00" & VideoG(  5 downto 2 ));
-                        b_v := unsigned(VideoB) - unsigned("00" & VideoB(  5 downto 2 ));
-                        pDac_VR <= std_logic_vector(r_v);
-                        pDac_VG <= std_logic_vector(g_v);
-                        pDac_VB <= std_logic_vector(b_v);
+                        r_v := unsigned(VideoR(  5 downto 1 )) - unsigned("00" & VideoR(  5 downto 3 ));
+                        g_v := unsigned(VideoG(  5 downto 1 )) - unsigned("00" & VideoG(  5 downto 3 ));
+                        b_v := unsigned(VideoB(  5 downto 1 )) - unsigned("00" & VideoB(  5 downto 3 ));
+                        pDac_VR <= "0" & std_logic_vector(r_v);
+                        pDac_VG <= "0" & std_logic_vector(g_v);
+                        pDac_VB <= "0" & std_logic_vector(b_v);
                     elsif( vga_scanlines = "01" )then
                         -- VGA Scanlines 12% of 6-bit DAC full-scale brightness
-                        r_v := unsigned(VideoR) - unsigned("000" & VideoR(  5 downto 3 ));
-                        g_v := unsigned(VideoG) - unsigned("000" & VideoG(  5 downto 3 ));
-                        b_v := unsigned(VideoB) - unsigned("000" & VideoB(  5 downto 3 ));
-                        pDac_VR <= std_logic_vector(r_v);
-                        pDac_VG <= std_logic_vector(g_v);
-                        pDac_VB <= std_logic_vector(b_v);
+                        r_v := unsigned(VideoR(  5 downto 1 )) - unsigned("000" & VideoR(  5 downto 4 ));
+                        g_v := unsigned(VideoG(  5 downto 1 )) - unsigned("000" & VideoG(  5 downto 4 ));
+                        b_v := unsigned(VideoB(  5 downto 1 )) - unsigned("000" & VideoB(  5 downto 4 ));
+                        pDac_VR <= "0" & std_logic_vector(r_v);
+                        pDac_VG <= "0" & std_logic_vector(g_v);
+                        pDac_VB <= "0" & std_logic_vector(b_v);
                     end if;
 
                 else
@@ -2112,22 +2112,22 @@ begin
 
                     if( vga_scanlines = "11" )then
                         -- VGA Scanlines 75% of 6-bit DAC full-scale brightness
+                        pDac_VR <= "000" & VideoR(  5 downto 3 );
+                        pDac_VG <= "000" & VideoG(  5 downto 3 );
+                        pDac_VB <= "000" & VideoB(  5 downto 3 );
+                    elsif( vga_scanlines = "10" )then
+                        -- VGA Scanlines 50% of 6-bit DAC full-scale brightness
                         pDac_VR <= "00" & VideoR(  5 downto 2 );
                         pDac_VG <= "00" & VideoG(  5 downto 2 );
                         pDac_VB <= "00" & VideoB(  5 downto 2 );
-                    elsif( vga_scanlines = "10" )then
-                        -- VGA Scanlines 50% of 6-bit DAC full-scale brightness
-                        pDac_VR <= "0" & VideoR(  5 downto 1 );
-                        pDac_VG <= "0" & VideoG(  5 downto 1 );
-                        pDac_VB <= "0" & VideoB(  5 downto 1 );
                     elsif( vga_scanlines = "01" )then
                         -- VGA Scanlines 25% of 6-bit DAC full-scale brightness
-                        r_v := unsigned(VideoR) - unsigned("00" & VideoR(  5 downto 2 ));
-                        g_v := unsigned(VideoG) - unsigned("00" & VideoG(  5 downto 2 ));
-                        b_v := unsigned(VideoB) - unsigned("00" & VideoB(  5 downto 2 ));
-                        pDac_VR <= std_logic_vector(r_v);
-                        pDac_VG <= std_logic_vector(g_v);
-                        pDac_VB <= std_logic_vector(b_v);
+                        r_v := unsigned(VideoR(  5 downto 1 )) - unsigned("00" & VideoR(  5 downto 3 ));
+                        g_v := unsigned(VideoG(  5 downto 1 )) - unsigned("00" & VideoG(  5 downto 3 ));
+                        b_v := unsigned(VideoB(  5 downto 1 )) - unsigned("00" & VideoB(  5 downto 3 ));
+                        pDac_VR <= "0" & std_logic_vector(r_v);
+                        pDac_VG <= "0" & std_logic_vector(g_v);
+                        pDac_VB <= "0" & std_logic_vector(b_v);
                     end if;
 
                 end if;
