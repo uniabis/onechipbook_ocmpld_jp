@@ -53,7 +53,7 @@ set_global_assignment -name VHDL_FILE ../ocm-pld-dev/esemsx3/src/sound/dac/esepw
 set_global_assignment -name VHDL_FILE ../ocm-pld-dev/esemsx3/src/peripheral/fifo.vhd
 set_global_assignment -name VHDL_FILE ../ocm-pld-dev/esemsx3/src/peripheral/kanji.vhd
 set_global_assignment -name VHDL_FILE src/keymap.onechipbook_jp.vhd
-set_global_assignment -name VHDL_FILE src/keymap.onechipbook_jp_r.vhd
+set_global_assignment -name VHDL_FILE src/keymap_r.onechipbook_jp.vhd
 set_global_assignment -name VHDL_FILE ../ocm-pld-dev/esemsx3/src/peripheral/mapper.vhd
 set_global_assignment -name VHDL_FILE ../ocm-pld-dev/esemsx3/src/peripheral/midi.vhd
 set_global_assignment -name VHDL_FILE ../ocm-pld-dev/esemsx3/src/peripheral/ram.vhd

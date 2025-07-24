@@ -1,5 +1,5 @@
 --
--- keymap.onechipbook_jp_r.vhd [US-JP]
+-- keymap_r.onechipbook_jp.vhd [US-JP]
 --   keymap ROM tables for eseps2.onechipbook_jp.v
 --   Revision 1.00
 --
