@@ -106,8 +106,7 @@ FPGA側でキー割り当てを変更しているため外部PS/2キーボード
 
 Cyclone Iデバイスの開発には、
 有料のQuartus II v13.0sp1 subscription editionか、
-すでに正式にはダウンロードできない、
-Quartus II v11.0sp1 web edition 以前が必要です。
+公開が再開された無料の[Quartus II v11.0sp1 web edition](https://www.altera.com/downloads/fpga-development-tools/quartus-ii-web-edition-design-software-version-11-0-b123-windows)以前が必要です。
 
 コンパイル済みのコンフィグレーションデータをフラッシュメモリEPCS4に書き込むだけであれば、
 最新バージョンのQuartus Prime LiteのProgrammer単体が適しています。
